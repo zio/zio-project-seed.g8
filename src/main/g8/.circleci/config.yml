@@ -1,4 +1,4 @@
-7ersion: 2.1
+version: 2.1
 
 scala_212: &scala_212
   SCALA_VERSION: 2.12.10
