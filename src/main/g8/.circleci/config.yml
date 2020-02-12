@@ -149,7 +149,7 @@ release: &release
       - run:
           name: Release artifacts
           command: |
-            mkdir -p $HOME/bin
+            mkdir -p \$HOME/bin
             sudo apt-get update && sudo apt-get -y install gnupg2
             echo pinentry-mode loopback >> ~/.gnupg/gpg.conf
             echo allow-loopback-pinentry >> ~/.gnupg/gpg-agent.conf
