@@ -180,7 +180,7 @@ object BuildHelper {
   )
 
   def stdSettings(prjName: String) = Seq(
-    name := s"$prjName",
+    name := s"\$prjName",
     scalacOptions := stdOptions,
     crossScalaVersions := Seq(Scala213, Scala212, Scala211),
     scalaVersion in ThisBuild := crossScalaVersions.value.head,
