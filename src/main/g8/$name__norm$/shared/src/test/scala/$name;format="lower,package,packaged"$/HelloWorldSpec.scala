@@ -1,4 +1,4 @@
-package $name;format="lower,package"$
+package $name;format="spaced,package,lower"$
 
 import zio._
 import zio.console._
