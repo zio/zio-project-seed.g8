@@ -1,4 +1,6 @@
 import BuildHelper._
+import explicitdeps.ExplicitDepsPlugin.autoImport.moduleFilterRemoveValue
+import sbtcrossproject.CrossPlugin.autoImport.crossProject
 
 inThisBuild(
   List(
@@ -25,22 +27,38 @@ inThisBuild(
 addCommandAlias("fmt", "all scalafmtSbt scalafmt test:scalafmt")
 addCommandAlias("check", "all scalafmtSbtCheck scalafmtCheck test:scalafmtCheck")
 
-val zioVersion = "1.0.0-RC17"
-libraryDependencies ++= Seq(
-  "dev.zio" %% "zio"          % zioVersion,
-  "dev.zio" %% "zio-test"     % zioVersion % "test",
-  "dev.zio" %% "zio-test-sbt" % zioVersion % "test"
-)
+val zioVersion = "1.0.0-RC18-2"
 
-testFrameworks := Seq(new TestFramework("zio.test.sbt.ZTestFramework"))
+lazy val root = project
+  .in(file("."))
+  .settings(
+    skip in publish := true,
+    unusedCompileDependenciesFilter -= moduleFilter("org.scala-js", "scalajs-library")
+  )
+  .aggregate(
+    $name;format="camel"$JVM,
+    $name;format="camel"$JS
+  )
 
-lazy val root =
-  (project in file("."))
-    .settings(
-      stdSettings("$name;format="norm"$")
+lazy val $name;format="camel"$ = crossProject(JSPlatform, JVMPlatform)
+  .in(file("$name;format="norm"$"))
+  .settings(stdSettings("$name;format="camel"$"))
+  .settings(crossProjectSettings)
+  .settings(buildInfoSettings("$name;format="lower,package"$"))
+  .settings(
+    libraryDependencies ++= Seq(
+      "dev.zio" %% "zio"          % zioVersion,
+      "dev.zio" %% "zio-test"     % zioVersion % "test",
+      "dev.zio" %% "zio-test-sbt" % zioVersion % "test"
     )
-    .settings(buildInfoSettings("$name;format="lower,package"$"))
-    .enablePlugins(BuildInfoPlugin)
+  )
+  .settings(testFrameworks += new TestFramework("zio.test.sbt.ZTestFramework"))
+
+lazy val $name;format="camel"$JS = $name;format="camel"$.js
+  .settings(scalaJSUseMainModuleInitializer := true)
+
+lazy val $name;format="camel"$JVM = $name;format="camel"$.jvm
+  .settings(dottySettings)
 
 lazy val docs = project
   .in(file("$name;format="norm"$-docs"))
