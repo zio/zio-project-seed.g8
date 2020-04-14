@@ -36,15 +36,15 @@ lazy val root = project
     unusedCompileDependenciesFilter -= moduleFilter("org.scala-js", "scalajs-library")
   )
   .aggregate(
-    $name;format="camel"$JVM,
-    $name;format="camel"$JS
+    $name;format="space,camel"$JVM,
+    $name;format="space,camel"$JS
   )
 
-lazy val $name;format="camel"$ = crossProject(JSPlatform, JVMPlatform)
+lazy val $name;format="space,camel"$ = crossProject(JSPlatform, JVMPlatform)
   .in(file("$name;format="norm"$"))
-  .settings(stdSettings("$name;format="camel"$"))
+  .settings(stdSettings("$name;format="space,camel"$"))
   .settings(crossProjectSettings)
-  .settings(buildInfoSettings("$name;format="lower,package"$"))
+  .settings(buildInfoSettings("$name;format="space,package,lower"$"))
   .settings(
     libraryDependencies ++= Seq(
       "dev.zio" %% "zio"          % zioVersion,
@@ -54,10 +54,10 @@ lazy val $name;format="camel"$ = crossProject(JSPlatform, JVMPlatform)
   )
   .settings(testFrameworks += new TestFramework("zio.test.sbt.ZTestFramework"))
 
-lazy val $name;format="camel"$JS = $name;format="camel"$.js
+lazy val $name;format="space,camel"$JS = $name;format="space,camel"$.js
   .settings(scalaJSUseMainModuleInitializer := true)
 
-lazy val $name;format="camel"$JVM = $name;format="camel"$.jvm
+lazy val $name;format="space,camel"$JVM = $name;format="space,camel"$.jvm
   .settings(dottySettings)
 
 lazy val docs = project
