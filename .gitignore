@@ -6,3 +6,5 @@ project/plugins/project/
 *.class
 *.log
 project/metals.sbt
+.metals/
+.bloop/
