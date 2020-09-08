@@ -5,6 +5,6 @@ src_managed/
 project/plugins/project/
 *.class
 *.log
-project/metals.sbt
+metals.sbt
 .metals/
 .bloop/
