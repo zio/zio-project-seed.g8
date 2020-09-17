@@ -1,0 +1,18 @@
+pull_request_rules:
+  - name: assign and label scala-steward's PRs
+    conditions:
+      - author=scala-steward
+    actions:
+      assign:
+        users: [adamgfraser]
+      label:
+        add: [dependency-update]
+  - name: merge Scala Steward's PRs
+    conditions:
+      - base=master
+      - author=scala-steward
+      - "body~=(labels: library-update, semver-minor)|(labels: library-update, semver-patch)|(labels: sbt-plugin-update, semver-minor)|(labels: sbt-plugin-update, semver-patch)|(labels: test-library-update, semver-minor)|(labels: test-library-update, semver-patch)"
+      - "status-success=license/cla"
+    actions:
+      merge:
+        method: squash
