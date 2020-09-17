@@ -18,16 +18,14 @@ inThisBuild(
     pgpPassphrase := sys.env.get("PGP_PASSWORD").map(_.toArray),
     pgpPublicRing := file("/tmp/public.asc"),
     pgpSecretRing := file("/tmp/secret.asc"),
-    scmInfo := Some(
-      ScmInfo(url("https://github.com/zio/$name;format="norm"$/"), "scm:git:git@github.com:zio/$name;format="norm"$.git")
-    )
   )
 )
 
 addCommandAlias("fmt", "all scalafmtSbt scalafmt test:scalafmt")
-addCommandAlias("check", "all scalafmtSbtCheck scalafmtCheck test:scalafmtCheck")
+addCommandAlias("fix", "all compile:scalafix; test:scalafix; scalafmtSbt; scalafmtAll")
+addCommandAlias("check", "all scalafmtSbtCheck; scalafmtCheckAll; compile:scalafix --check; test:scalafix --check")
 
-val zioVersion = "1.0.0-RC18-2"
+val zioVersion = "1.0.1"
 
 lazy val root = project
   .in(file("."))
