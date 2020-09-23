@@ -212,7 +212,7 @@ object BuildHelper {
   )
 
   def stdSettings(prjName: String) = Seq(
-    name := s"$prjName",
+    name := s"\$prjName",
     crossScalaVersions := Seq(Scala211, Scala212, Scala213),
     scalaVersion in ThisBuild := Scala212,
     scalacOptions := stdOptions ++ extraOptions(scalaVersion.value, optimize = !isSnapshot.value),
