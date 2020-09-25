@@ -1,14 +1,16 @@
 package $name;format="space,package,lower"$
 
-import zio.App
+import java.io.IOException
+
 import zio.console._
+import zio.{ App, ExitCode, URIO, ZIO }
 
 object HelloWorld extends App {
 
-  def run(args: List[String]) =
+  override def run(args: List[String]): URIO[Console, ExitCode] =
     myAppLogic.exitCode
 
-  val myAppLogic =
+  val myAppLogic: ZIO[Console, IOException, Unit] =
     for {
       _    <- putStrLn("Hello! What is your name?")
       name <- getStrLn
