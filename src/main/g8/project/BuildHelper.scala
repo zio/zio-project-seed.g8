@@ -219,7 +219,7 @@ object BuildHelper {
     libraryDependencies ++= {
       if (isDotty.value)
         Seq(
-          ("com.github.ghik" % s"silencer-lib_$Scala213" % SilencerVersion % Provided)
+          ("com.github.ghik" % s"silencer-lib_\$Scala213" % SilencerVersion % Provided)
             .withDottyCompat(scalaVersion.value)
         )
       else
@@ -342,28 +342,28 @@ object BuildHelper {
   def welcomeMessage = onLoadMessage := {
     import scala.Console
 
-    def header(text: String): String = s"${Console.RED}$text${Console.RESET}"
+    def header(text: String): String = s"\${Console.RED}\$text\${Console.RESET}"
 
-    def item(text: String): String    = s"${Console.GREEN}> ${Console.CYAN}$text${Console.RESET}"
-    def subItem(text: String): String = s"  ${Console.YELLOW}> ${Console.CYAN}$text${Console.RESET}"
+    def item(text: String): String    = s"\${Console.GREEN}> \${Console.CYAN}\$text\${Console.RESET}"
+    def subItem(text: String): String = s"  \${Console.YELLOW}> \${Console.CYAN}\$text\${Console.RESET}"
 
-    s"""|${header(" ________ ___")}
-        |${header("|__  /_ _/ _ \\")}
-        |${header("  / / | | | | |")}
-        |${header(" / /_ | | |_| |")}
-        |${header(s"/____|___\\___/   ${version.value}")}
+    s"""|\${header(" ________ ___")}
+        |\${header("|__  /_ _/ _ \\")}
+        |\${header("  / / | | | | |")}
+        |\${header(" / /_ | | |_| |")}
+        |\${header(s"/____|___\\___/   \${version.value}")}
         |
         |Useful sbt tasks:
-        |${item("build")} - Prepares sources, compiles and runs tests.
-        |${item("prepare")} - Prepares sources by applying both scalafix and scalafmt
-        |${item("fix")} - Fixes sources files using scalafix
-        |${item("fmt")} - Formats source files using scalafmt
-        |${item("~compileJVM")} - Compiles all JVM modules (file-watch enabled)
-        |${item("testJVM")} - Runs all JVM tests
-        |${item("testJS")} - Runs all ScalaJS tests
-        |${item("testOnly *.YourSpec -- -t \"YourLabel\"")} - Only runs tests with matching term e.g.
-        |${subItem("coreTestsJVM/testOnly *.ZIOSpec -- -t \"happy-path\"")}
-        |${item("docs/docusaurusCreateSite")} - Generates the ZIO microsite
+        |\${item("build")} - Prepares sources, compiles and runs tests.
+        |\${item("prepare")} - Prepares sources by applying both scalafix and scalafmt
+        |\${item("fix")} - Fixes sources files using scalafix
+        |\${item("fmt")} - Formats source files using scalafmt
+        |\${item("~compileJVM")} - Compiles all JVM modules (file-watch enabled)
+        |\${item("testJVM")} - Runs all JVM tests
+        |\${item("testJS")} - Runs all ScalaJS tests
+        |\${item("testOnly *.YourSpec -- -t \"YourLabel\"")} - Only runs tests with matching term e.g.
+        |\${subItem("coreTestsJVM/testOnly *.ZIOSpec -- -t \"happy-path\"")}
+        |\${item("docs/docusaurusCreateSite")} - Generates the ZIO microsite
       """.stripMargin
   }
 
