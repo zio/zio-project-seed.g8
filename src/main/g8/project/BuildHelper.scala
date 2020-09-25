@@ -348,10 +348,10 @@ object BuildHelper {
     def subItem(text: String): String = s"  \${Console.YELLOW}> \${Console.CYAN}\$text\${Console.RESET}"
 
     s"""|\${header(" ________ ___")}
-        |\${header("|__  /_ _/ _ \\")}
+        |\${header("|__  /_ _/ _ \\\\")}
         |\${header("  / / | | | | |")}
         |\${header(" / /_ | | |_| |")}
-        |\${header(s"/____|___\\___/   \${version.value}")}
+        |\${header(s"/____|___\\\\___/   \${version.value}")}
         |
         |Useful sbt tasks:
         |\${item("build")} - Prepares sources, compiles and runs tests.
