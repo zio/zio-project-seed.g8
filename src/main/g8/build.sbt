@@ -1,6 +1,4 @@
 import BuildHelper._
-import explicitdeps.ExplicitDepsPlugin.autoImport.moduleFilterRemoveValue
-import sbtcrossproject.CrossPlugin.autoImport.crossProject
 
 inThisBuild(
   List(
@@ -22,8 +20,8 @@ inThisBuild(
 )
 
 addCommandAlias("fmt", "all scalafmtSbt scalafmt test:scalafmt")
-addCommandAlias("fix", "all compile:scalafix; test:scalafix; scalafmtSbt; scalafmtAll")
-addCommandAlias("check", "all scalafmtSbtCheck; scalafmtCheckAll; compile:scalafix --check; test:scalafix --check")
+addCommandAlias("fix", "; all compile:scalafix test:scalafix; all scalafmtSbt scalafmtAll")
+addCommandAlias("check", "; scalafmtSbtCheck; scalafmtCheckAll; compile:scalafix --check; test:scalafix --check")
 
 val zioVersion = "1.0.1"
 
@@ -39,8 +37,8 @@ lazy val root = project
   )
 
 lazy val $name;format="space,camel"$ = crossProject(JSPlatform, JVMPlatform)
-  .in(file("$name;format="norm"$"))
-  .settings(stdSettings("$name;format="space,camel"$"))
+  .in(file("$name;format="space,hyphen,lower"$"))
+  .settings(stdSettings("$name;format="space,hyphen,lower"$"))
   .settings(crossProjectSettings)
   .settings(buildInfoSettings("$name;format="space,package,lower"$"))
   .settings(

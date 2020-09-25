@@ -113,7 +113,7 @@ mdoc: &mdoc
     - run:
         name: Generate documentation
         command: |
-          ./sbt -Dfatal.warnings=true coreJVM/doc coreJS/doc streamsJVM/doc streamsJS/doc testJVM/doc testJS/doc
+          ./sbt -Dfatal.warnings=true doc
           ./sbt ++${SCALA_VERSION}! mdoc
     - <<: *clean_cache
     - <<: *save_cache
@@ -459,8 +459,8 @@ workflows:
             - test_213_jdk8_js
 #            - test_dotty_jdk8_jvm
             - mdoc
-            - mima_212
-            - mima_213
+#            - mima_212
+#            - mima_213
           filters:
             <<: *filter_tags
             branches:
