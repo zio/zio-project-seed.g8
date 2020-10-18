@@ -8,3 +8,4 @@ project/plugins/project/
 metals.sbt
 .metals/
 .bloop/
+.vscode/
