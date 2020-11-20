@@ -6,13 +6,14 @@ import org.portablescala.sbtplatformdeps.PlatformDepsPlugin.autoImport._
 import sbtbuildinfo._
 import dotty.tools.sbtplugin.DottyPlugin.autoImport._
 import BuildInfoKeys._
+import scalafix.sbt.ScalafixPlugin.autoImport.scalafixSemanticdb
 import scalafix.sbt.ScalafixPlugin.autoImport._
 
 object BuildHelper {
   val Scala211        = "2.11.12"
   val Scala212        = "2.12.12"
   val Scala213        = "2.13.3"
-  val ScalaDotty      = "0.26.0"
+  val ScalaDotty      = "0.27.0-RC1"
   val SilencerVersion = "1.7.1"
 
   private val stdOptions = Seq(
@@ -21,7 +22,13 @@ object BuildHelper {
     "UTF-8",
     "-feature",
     "-unchecked"
-  )
+  ) ++ {
+    if (sys.env.contains("CI")) {
+      Seq("-Xfatal-warnings") // to enable Scalafix
+    } else {
+      Nil
+    }
+  }
 
   private val std2xOptions = Seq(
     "-language:higherKinds",
@@ -31,7 +38,7 @@ object BuildHelper {
     "-Xlint:_,-missing-interpolator,-type-parameter-shadow",
     "-Ywarn-numeric-widen",
     "-Ywarn-value-discard"
-  ) ++ customOptions
+  )
 
   private def optimizerOptions(optimize: Boolean) =
     if (optimize)
@@ -41,19 +48,9 @@ object BuildHelper {
       )
     else Nil
 
-  private def propertyFlag(property: String, default: Boolean) =
-    sys.props.get(property).map(_.toBoolean).getOrElse(default)
-
-  private def customOptions =
-    if (propertyFlag("fatal.warnings", true)) {
-      Seq("-Xfatal-warnings")
-    } else {
-      Nil
-    }
-
   def buildInfoSettings(packageName: String) =
     Seq(
-      buildInfoKeys := Seq[BuildInfoKey](name, version, scalaVersion, sbtVersion, isSnapshot),
+      buildInfoKeys := Seq[BuildInfoKey](organization, moduleName, version, scalaVersion, sbtVersion, isSnapshot),
       buildInfoPackage := packageName,
       buildInfoObject := "BuildInfo"
     )
@@ -225,10 +222,12 @@ object BuildHelper {
       else
         Seq(
           "com.github.ghik" % "silencer-lib" % SilencerVersion % Provided cross CrossVersion.full,
-          compilerPlugin("com.github.ghik" % "silencer-plugin" % SilencerVersion cross CrossVersion.full)
+          compilerPlugin("com.github.ghik" % "silencer-plugin" % SilencerVersion cross CrossVersion.full),
+          compilerPlugin("org.typelevel"  %% "kind-projector"  % "0.11.1" cross CrossVersion.full)
         )
     },
     semanticdbEnabled := !isDotty.value, // enable SemanticDB
+    semanticdbOptions += "-P:semanticdb:synthetics:on",
     semanticdbVersion := scalafixSemanticdb.revision, // use Scalafix compatible version
     ThisBuild / scalafixScalaBinaryVersion := CrossVersion.binaryScalaVersion(scalaVersion.value),
     ThisBuild / scalafixDependencies ++= List(
@@ -244,6 +243,7 @@ object BuildHelper {
         case Some((2, x)) if x <= 11 =>
           Seq(
             Seq(file(sourceDirectory.value.getPath + "/main/scala-2.11")),
+            Seq(file(sourceDirectory.value.getPath + "/main/scala-2.11-2.12")),
             CrossType.Full.sharedSrcDir(baseDirectory.value, "main").toList.map(f => file(f.getPath + "-2.11")),
             CrossType.Full.sharedSrcDir(baseDirectory.value, "test").toList.map(f => file(f.getPath + "-2.11")),
             CrossType.Full.sharedSrcDir(baseDirectory.value, "main").toList.map(f => file(f.getPath + "-2.x")),
@@ -251,6 +251,7 @@ object BuildHelper {
           ).flatten
         case Some((2, x)) if x == 12 =>
           Seq(
+            Seq(file(sourceDirectory.value.getPath + "/main/scala-2.11-2.12")),
             Seq(file(sourceDirectory.value.getPath + "/main/scala-2.12")),
             Seq(file(sourceDirectory.value.getPath + "/main/scala-2.12+")),
             CrossType.Full.sharedSrcDir(baseDirectory.value, "main").toList.map(f => file(f.getPath + "-2.12+")),
@@ -263,6 +264,7 @@ object BuildHelper {
           Seq(
             Seq(file(sourceDirectory.value.getPath + "/main/scala-2.12")),
             Seq(file(sourceDirectory.value.getPath + "/main/scala-2.12+")),
+            Seq(file(sourceDirectory.value.getPath + "/main/scala-2.13+")),
             CrossType.Full.sharedSrcDir(baseDirectory.value, "main").toList.map(f => file(f.getPath + "-2.12+")),
             CrossType.Full.sharedSrcDir(baseDirectory.value, "test").toList.map(f => file(f.getPath + "-2.12+")),
             CrossType.Full.sharedSrcDir(baseDirectory.value, "main").toList.map(f => file(f.getPath + "-2.x")),
@@ -274,6 +276,7 @@ object BuildHelper {
             Seq(
               Seq(file(sourceDirectory.value.getPath + "/main/scala-2.12")),
               Seq(file(sourceDirectory.value.getPath + "/main/scala-2.12+")),
+              Seq(file(sourceDirectory.value.getPath + "/main/scala-2.13+")),
               CrossType.Full.sharedSrcDir(baseDirectory.value, "main").toList.map(f => file(f.getPath + "-2.12+")),
               CrossType.Full.sharedSrcDir(baseDirectory.value, "test").toList.map(f => file(f.getPath + "-2.12+")),
               CrossType.Full.sharedSrcDir(baseDirectory.value, "main").toList.map(f => file(f.getPath + "-dotty")),
