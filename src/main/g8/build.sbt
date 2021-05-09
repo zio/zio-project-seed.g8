@@ -68,10 +68,13 @@ lazy val $name;format="space,camel"$ = crossProject(JSPlatform, JVMPlatform, Nat
 
 lazy val $name;format="space,camel"$JS = $name;format="space,camel"$.js
   .settings(jsSettings)
+  .settings(libraryDependencies += "dev.zio" %%% "zio-test-sbt" % zioVersion % Test)
   .settings(scalaJSUseMainModuleInitializer := true)
 
 lazy val $name;format="space,camel"$JVM = $name;format="space,camel"$.jvm
   .settings(dottySettings)
+  .settings(libraryDependencies += "dev.zio" %%% "zio-test-sbt" % zioVersion % Test)
+  .settings(scalaReflectTestSettings)
 
 lazy val $name;format="space,camel"$Native = $name;format="space,camel"$.native
   .settings(nativeSettings)
