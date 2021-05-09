@@ -64,6 +64,7 @@ lazy val $name;format="space,camel"$ = crossProject(JSPlatform, JVMPlatform, Nat
     )
   )
   .settings(testFrameworks += new TestFramework("zio.test.sbt.ZTestFramework"))
+  .enablePlugins(BuildInfoPlugin)
 
 lazy val $name;format="space,camel"$JS = $name;format="space,camel"$.js
   .settings(jsSettings)
@@ -84,7 +85,7 @@ lazy val docs = project
     scalacOptions -= "-Yno-imports",
     scalacOptions -= "-Xfatal-warnings",
     ScalaUnidoc / unidoc / unidocProjectFilter := inProjects($name;format="space,camel"$JVM),
-    ScalaUnidoc / unidoc / target := (baseDirectory in LocalRootProject).value / "website" / "static" / "api",
+    ScalaUnidoc / unidoc / target := (LocalRootProject / baseDirectory).value / "website" / "static" / "api",
     cleanFiles += (ScalaUnidoc / unidoc / target).value,
     docusaurusCreateSite := docusaurusCreateSite.dependsOn(Compile / unidoc).value,
     docusaurusPublishGhpages := docusaurusPublishGhpages.dependsOn(Compile / unidoc).value
