@@ -8,3 +8,6 @@ project/plugins/project/
 metals.sbt
 .metals/
 .bloop/
+website/i18n
+website/yarn.lock
+website/static/api
