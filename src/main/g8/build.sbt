@@ -36,7 +36,7 @@ addCommandAlias(
   ";$name;format="space,camel"$Native/test:compile"
 )
 
-val zioVersion = "1.0.7"
+val zioVersion = "1.0.9"
 
 lazy val root = project
   .in(file("."))
